@@ -8,16 +8,20 @@ namespace ConsoleApp1
 {
     public static class Actions
     {
-
-        public static int Shoot(Gun gun, int shots)
+        public static void Shoot(Gun gun, int shots, Player badguy)
         {
-            if (shots < gun.AmmoLoaded)
+            gun.AmmoLoaded -= shots;
+
+            // Calculate Hit Chance (if random > badguy.armor then success)
+            Random rnd = new Random();
+            int hitChance = rnd.Next(1, 10);
+            if (hitChance > badguy.Armor)
             {
-                gun.AmmoLoaded -= shots;
-                return gun.AmmoLoaded;
+                badguy.Health -= gun.damage;
+                Console.WriteLine("You HIT!\nYou have " + gun.AmmoLoaded + " shots left.\nThe " + badguy.Name + " has " + Math.Max(0, badguy.Health) + " health left.");
             } else
             {
-                return 0;
+                Console.WriteLine("You Missed!\nYou have " + gun.AmmoLoaded + " shots left.\nThe " + badguy.Name + " has " + Math.Max(0, badguy.Health) + " health left.");
             }
         }
 
@@ -25,6 +29,7 @@ namespace ConsoleApp1
         {
             gun.AmmoLoaded = gun.AmmoMax;
         }
+        
         public static void PickupItem(Player player, Gun item)
         {
             if (player.Item1 == null)

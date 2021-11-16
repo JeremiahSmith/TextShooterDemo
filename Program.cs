@@ -10,53 +10,39 @@ namespace ConsoleApp1
     {
         static void Main(string[] args)
         {
+            // Build Game Objects
             Gun glock = new Gun() { GunName = "Glock", AmmoLoaded = 12, AmmoMax = 12, damage = 4 };
-            Gun mouser = new Gun() { GunName = "Mouser", AmmoLoaded = 15, AmmoMax = 15, damage = 3};
-            Gun bazuka = new Gun() { GunName = "Bazuka", AmmoLoaded = 2, AmmoMax = 2, damage = 5};
-            Player player1 = new Player();
+            Gun mouser = new Gun() { GunName = "Mouser", AmmoLoaded = 15, AmmoMax = 15, damage = 3 };
+            Gun bazuka = new Gun() { GunName = "Bazuka", AmmoLoaded = 2, AmmoMax = 2, damage = 5 };
+            Player hero1 = new Player() { Health = 10, Armor = 0 };
+            Player badguy1 = new Player() { Name = "Thug", Health = 10, Armor = 2, Item1 = glock };
 
-            string answer;
-
-
+            // Get Hero's Name
             Console.WriteLine("What is your player's name?");
-            player1.Name = Console.ReadLine();
+            hero1.Name = Console.ReadLine();
 
-            Console.WriteLine("\nYou see something on the ground! Pick it up? Yes/No");
-            answer = Console.ReadLine().ToLower();
-            if (answer == "yes")
+            // Explore and get items
+            Events.PickUpItem(hero1, glock);
+            Events.PickUpItem(hero1, mouser);
+            Events.PickUpItem(hero1, bazuka);
+
+            // Do Battle
+            while (hero1.Health > 0 || badguy1.Health > 0)
             {
-                Actions.PickupItem(player1, glock);
-            }
+                Events.Attack(hero1, badguy1);
 
-            Console.WriteLine("\nYou see something else in the dirt! Pick it up? Yes/No");
-            answer = Console.ReadLine().ToLower();
-            if (answer == "yes")
-            {
-                Actions.PickupItem(player1, mouser);
-
-            }
-
-            Console.WriteLine("\nYou see a third item on the ground! Pick it up? Yes/No");
-            answer = Console.ReadLine().ToLower();
-            if (answer == "yes")
-            {
-                Actions.PickupItem(player1, bazuka);
-
-            }
-
-            Console.WriteLine("\nThere's a badguy!  Shoot'm? With what?\n[1] " + player1.Item1.GunName + "\n[2] " + player1.Item2.GunName + "\n[3] Don't shoot!");
-            answer = Console.ReadLine().ToLower();
-            switch (answer)
-            {
-                case "1":
-                    Console.WriteLine("You HIT!\nYou have " + Actions.Shoot(player1.Item1, 1) + " shots left.");
+                if (hero1.Health <= 0)
+                {
+                    Console.WriteLine("Oh noooos.  You died!");
                     break;
-                case "2":
-                    Console.WriteLine("You HIT!\nYou have " + Actions.Shoot(player1.Item2, 1) + " shots left.");
+                }
+                else if (badguy1.Health <= 0)
+                {
+                    Console.WriteLine("Wohoo!  You got'm!");
                     break;
-                default:
-                    break;
+                }
             }
+            
 
             Console.ReadLine();
         }

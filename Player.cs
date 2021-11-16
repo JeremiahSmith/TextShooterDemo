@@ -11,5 +11,7 @@ namespace ConsoleApp1
         public string Name { get; set; }
         public Gun Item1 { get; set; }
         public Gun Item2 { get; set; }
+        public int Health { get; set; }
+        public int Armor { get; set; }
     }
 }
